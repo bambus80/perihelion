@@ -7,7 +7,7 @@ USER_AVAILABLE_DATA: Dict[str, Property[Any]] = {
     "Global: Compact mode": Property[bool](False, False),
     "Rolling: Default roll": Property[str]("1d100", False),
     "Define: English-only": Property[bool](False, False),
-    "RngSim: Highscore": Property[float](0, True),
+    "RngSim: Highscore": Property[float](float(0), True),
 }
 
 GUILD_AVAILABLE_DATA: Dict[str, Property[Any]] = {
