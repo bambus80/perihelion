@@ -188,6 +188,7 @@ class {cog_name}Cog(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         log.info("Cog: {cog_name.lower()} loaded")
+
 '''
 
             # Commands
@@ -206,16 +207,15 @@ class {cog_name}Cog(commands.Cog):
 
                 descrs = []
                 for param in cmd['parameters']:
+                    if not param['description']: pass
                     descrs.append(f"{param['name']}=\"{param['description']}\",")
 
-                description_str = f"@app_commands.describe(\n        {'\n        '.join(descrs)}\n)"
-                content += f'''
-    @app_commands.command(name="{cmd['name']}", description="{cmd['description']}")
-    {description_str}
+                description_str = f"\n    @app_commands.describe(\n        {'\n        '.join(descrs)}\n    )" if descrs else ""
+                content += f'''    @app_commands.command(name="{cmd['name']}", description="{cmd['description']}"){description_str}
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def {cmd['name']}({param_str}):
-        pass
+        ... # TODO: implement
 
 '''
 
