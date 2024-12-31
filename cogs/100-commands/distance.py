@@ -171,7 +171,10 @@ class DistanceCog(commands.Cog):
                 img.alpha_composite(oimg, (round(x-w/2), round(320-h/2)), (0,0))
 
         #sun
-        x = 780 + log10(distance)*5
+        try:
+            x = 780 + log10(distance)*5
+        except ValueError:
+            x = 780
         d.circle((x,320), radius=250, fill=(0, 0, 0)) #drawn to cover up anything that might be inside the sun
         d.circle((x,320), radius=250, outline=(218, 193, 134), width=20)
 

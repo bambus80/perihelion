@@ -37,7 +37,7 @@ async def viewmenu_paginate_entries(self, ctx, entries, title="List", amount=20)
     for i in range(0, len(entries), amount):
         group = entries[i:i + amount]
         formatted_group = "\n".join(f"- {item}" for item in group)
-        menu.add_page(self.embed_template(title, formatted_group))
+        menu.add_page(embed_template(title, formatted_group))
 
     menu.add_button(ViewButton.back())
     menu.add_button(ViewButton.next())
