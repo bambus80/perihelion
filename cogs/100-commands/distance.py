@@ -23,7 +23,7 @@ class DistanceCog(commands.Cog):
         log.info("Cog: distance loaded")
 
     objects = {
-        1: {
+        4: {
             "asset": "assets/distance/perihelion.png"
         },
         5.91*10**7: {
@@ -61,7 +61,7 @@ class DistanceCog(commands.Cog):
         if distance <= 0:
             distance = 0
             comment = "You are *in* the Sun. Surprisingly better than the corona, though."
-        elif distance <= 1:
+        elif distance <= 5:
             comment = "Perihelion."
         elif distance < 10**6.5:
             comment = choice([f"You're in the corona, in the millions of degrees. {choice(["Ought to get an ice pack.",
