@@ -164,16 +164,16 @@ class WikiCog(commands.GroupCog, group_name="wiki"):
         except ValueError:
             await interaction.response.send_message(embed=error_template("Page not found"), ephemeral=True)
         await interaction.response.send_message(embed=embed_template(f"success", f"{page} unlocked"))
-
-    @app_commands.command(name="list")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def list(self, interaction: discord.Interaction):
-        """
-        List out all pages.
-        """
-        wiki, _ = self.wikimanager.get_or_create_wiki(self.wmcog.get_id_from_interaction(interaction), self.wmcog.get_name_from_interaction(interaction))
-        await viewmenu_paginate_entries(interaction, wiki.get_all_page_titles(), "Wiki pages")
+#
+#    @app_commands.command(name="list")
+#    @app_commands.allowed_installs(guilds=True, users=True)
+#    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+#    async def list(self, interaction: discord.Interaction):
+#        """
+#        List out all pages.
+#        """
+#        wiki, _ = self.wikimanager.get_or_create_wiki(self.wmcog.get_id_from_interaction(interaction), self.wmcog.get_name_from_interaction(interaction))
+#        await viewmenu_paginate_entries(interaction, wiki.get_all_page_titles(), "Wiki pages")
 
 
 # The `setup` function is required for the cog to work

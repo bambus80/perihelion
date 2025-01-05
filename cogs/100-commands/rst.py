@@ -15,6 +15,7 @@ class RstCog(commands.GroupCog, group_name="rst"):
     def __init__(self, client):
         self.client = client
         self.filename = "./data/custom_texts.txt"
+        self.modqueue = "./data/custom_text_queued.txt"
 
         # Ensure the file exists
         try:
@@ -24,12 +25,11 @@ class RstCog(commands.GroupCog, group_name="rst"):
             log.error(f"Error creating or accessing the file: {e}")
 
     def add_text(self, text):
-        print("add_text ", text)
         try:
-            with open(self.filename, 'a') as file:
+            with open(self.modqueue, 'a') as file:
                 file.write(text + '\n')
         except IOError as e:
-            log.error(f"Error writing to file: {e}")
+            log.error(f"Error writing to modqueue: {e}")
 
     def get_random_text(self):
         try:
@@ -49,7 +49,7 @@ class RstCog(commands.GroupCog, group_name="rst"):
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def add(self, interaction: discord.Interaction, text: str):
         """
-        Add a string to the database.
+        Add a string to the database, after it is moderated.
 
         Parameters
         ------------
@@ -60,9 +60,9 @@ class RstCog(commands.GroupCog, group_name="rst"):
         settings = get_data_manager("user", interaction.user.id)
 
         if settings["Global: Compact mode"]:
-            await interaction.response.send_message("Your text has been added to the database.")
+            await interaction.response.send_message("Your text has been added to the moderation queue.")
         else:
-            await interaction.response.send_message(embeds=[embed_template("text added", "Your text has been added to the database.")])
+            await interaction.response.send_message(embeds=[embed_template("text added", "Your text has been added to the moderation queue.")])
 
     @app_commands.command(name="get")
     @app_commands.allowed_installs(guilds=True, users=True)

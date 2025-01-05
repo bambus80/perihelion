@@ -31,13 +31,13 @@ def error_template(description: str) -> discord.Embed:
     _error_template.set_footer(text=EMBED["FOOTER"])
     return _error_template.copy()
 
-async def viewmenu_paginate_entries(self, ctx, entries, title="List", amount=20):
+async def viewmenu_paginate_entries(self, ctx: discord.Interaction, entries, title="List", amount=20):
     """Creates a paginated viewer of entries. Also automatically handles display."""
-    menu = ViewMenu(ctx, menu_type=ViewMenu.TypeEmbed)
+    menu = ViewMenu(ctx, menu_type=ViewMenu.TypeText)
     for i in range(0, len(entries), amount):
         group = entries[i:i + amount]
         formatted_group = "\n".join(f"- {item}" for item in group)
-        menu.add_page(embed_template(title, formatted_group))
+        menu.add_page(content=f"## {title}:\n{formatted_group}")
 
     menu.add_button(ViewButton.back())
     menu.add_button(ViewButton.next())

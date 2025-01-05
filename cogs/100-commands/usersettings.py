@@ -7,6 +7,8 @@ from typing import Optional
 from utils.userdata import get_data_manager
 from discord.app_commands import locale_str
 
+import time
+
 def _get_choices_from_list_settings():
     return [app_commands.Choice(name=x,value=x) for x in get_data_manager("user", 0).get_available_data_keys(bypass_locked=False)]
 
@@ -16,7 +18,8 @@ class UserSettingsCog(commands.GroupCog, group_name="usersettings"):
     def __init__(self, client):
         self.client = client
         self.language = client.get_cog('language')
-
+        self.last_clear = {}
+        
     @commands.Cog.listener()
     async def on_ready(self):
         log.info("Cog: user settings loaded")
@@ -75,13 +78,38 @@ class UserSettingsCog(commands.GroupCog, group_name="usersettings"):
         """
         setting_val = setting.value
         settings = get_data_manager("user", interaction.user.id)
-
+        
         setting_value = settings[setting_val]
 
         if settings["Global: Compact mode"]:
             await interaction.response.send_message(f"{setting_val} is set to {setting_value}", ephemeral=True)
         else:
             await interaction.response.send_message(embed=embed_template(f"{setting_val}'s value", f"{setting_value}"), ephemeral=True)
+
+
+    @app_commands.command(name="clear")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def clear(self, interaction: discord.Interaction):
+        """
+        Reset your user settings.
+        """
+        settings = get_data_manager("user", interaction.user.id)
+
+        if interaction.user.id not in self.last_clear or self.last_clear[interaction.user.id] + 30 < time.time():
+            self.last_clear[interaction.user.id] = time.time()
+            if settings["Global: Compact mode"]:
+                await interaction.response.send_message(f"To confirm you want to clear settings, please run this command again.", ephemeral=True)
+            else:
+                await interaction.response.send_message(embed=embed_template(f"confirm settings clear", f"To confirm you want to clear settings, please run this command again."), ephemeral=True)
+            return
+        
+        settings.clear_data(False)
+    
+        if settings["Global: Compact mode"]:
+            await interaction.response.send_message(f"Your settings have been cleared.", ephemeral=True)
+        else:
+            await interaction.response.send_message(embed=embed_template(f"settings cleared", f"Your settings have been set to their default value."), ephemeral=True)
 
 
 async def setup(client):

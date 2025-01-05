@@ -1,9 +1,9 @@
 colorlog>=6.8.0
 beautifulsoup4>=4.12.0
-reactionmenu>=3.1.0
+reactionmenu>=3.1.7
 pillow>=10.4.0
 requests>=2.32.0
 cexprtk>=0.4.0
 discord.py>=2.4.0
 rollplayerlib==0.5.4
-peridata>=1.0.0
+peridata>=1.3.3

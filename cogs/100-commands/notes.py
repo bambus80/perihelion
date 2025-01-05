@@ -161,15 +161,15 @@ class NoteCog(commands.GroupCog, group_name="note"):
             await interaction.response.send_message(embed=error_template("Page not found"), ephemeral=True)
         await interaction.response.send_message(embed=embed_template(f"success", f"{page} unlocked"))
 
-    @app_commands.command(name="list")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def list(self, interaction: discord.Interaction):
-        """
-        List out all notes.
-        """
-        wiki, _ = self.wikimanager.get_or_create_wiki(interaction.user.id, f"{interaction.user.name}'s notes")
-        await viewmenu_paginate_entries(interaction, wiki.get_all_page_titles(), "Your notes")
+#    @app_commands.command(name="list")
+#    @app_commands.allowed_installs(guilds=True, users=True)
+#    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+#    async def list(self, interaction: discord.Interaction):
+#        """
+#        List out all notes.
+#        """
+#        wiki, _ = self.wikimanager.get_or_create_wiki(interaction.user.id, f"{interaction.user.name}'s notes")
+#        await viewmenu_paginate_entries(interaction, wiki.get_all_page_titles(), "Your notes")
 
 
 # The `setup` function is required for the cog to work
