@@ -4,10 +4,13 @@ import discord
 from discord import User, Member, app_commands
 from discord.ext import commands
 from utils.logging import log
+from utils.translation import JSONTranslator
 
 class TicTacToeCog(commands.Cog, name="games/tictactoe"):
     def __init__(self, client):
         self.client = client
+        self.translator: JSONTranslator = client.tree.translator
+
 
     class TicTacToeButton(discord.ui.Button['TicTacToe']):
         def __init__(self, x: int, y: int, misere: bool):

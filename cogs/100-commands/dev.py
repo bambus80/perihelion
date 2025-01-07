@@ -4,6 +4,7 @@ from discord.ext import commands
 from utils.logging import log
 from utils.embeds import *
 from typing import Optional
+from utils.translation import JSONTranslator
 from utils.userdata import get_data_manager
 from discord.app_commands import locale_str
 
@@ -15,10 +16,12 @@ def _get_choices_from_list_settings():
 class DeveloperCommandsCog(commands.GroupCog, group_name="dev"):
     def __init__(self, client):
         self.client = client
+        self.translator: JSONTranslator = client.tree.translator
+
 
     @commands.Cog.listener()
     async def on_ready(self):
-        log.info("Cog: developer loaded")
+        log.info("Cog: developer loaded") # This cog left untranslated. It's a developer command.
 
     @app_commands.command(name="set_usrstg", description="A developer command. You can't run this, maybe you're looking for /usersettings set?")
     @app_commands.allowed_installs(guilds=True, users=True)
@@ -36,7 +39,7 @@ class DeveloperCommandsCog(commands.GroupCog, group_name="dev"):
             elif value.lower() in ["0", "no", "n", "false", "f"]:
                 value_typed = False
             else:
-                await interaction.response.send_message(embed=error_template("The setting you're trying to set is a boolean, so it must be true or false!"))
+                await interaction.response.send_message(embed=error_template(interaction, "The setting you're trying to set is a boolean, so it must be true or false!"))
                 return
         elif setting_type is str:
             value_typed = value
@@ -45,7 +48,7 @@ class DeveloperCommandsCog(commands.GroupCog, group_name="dev"):
         elif setting_type is float:
             value_typed = float(value)
         else:
-            await interaction.response.send_message(embed=error_template("The option can't find the correct typing, don't forget to add it!"))
+            await interaction.response.send_message(embed=error_template(interaction, "The option can't find the correct typing, don't forget to add it!"))
             return
         settings[setting_val]=value_typed
         await interaction.response.send_message(f"`{userid}`'s {setting_val} set to {value_typed}", ephemeral=True)

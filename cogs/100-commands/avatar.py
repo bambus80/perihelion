@@ -4,6 +4,7 @@ from discord.ext import commands
 from utils.logging import log
 from utils.embeds import *
 from typing import Optional
+from utils.translation import JSONTranslator
 from utils.userdata import get_data_manager
 
 from PIL import Image
@@ -13,8 +14,10 @@ from io import BytesIO
 class AvatarCog(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.translator: JSONTranslator = client.tree.translator
+
         self.ctx_menu = app_commands.ContextMenu(
-            name='Avatar',
+            name='command_avatar_ctxmenu',
             callback=self.avatar_menu,
         )
         self.client.tree.add_command(self.ctx_menu)
@@ -35,8 +38,9 @@ class AvatarCog(commands.Cog):
         b.seek(0)
         return b
 
-    @app_commands.command(name="avatar", description="Get a user's avatar.")
-    @app_commands.describe(user="The user to get the avatar of.", crop="Crop the avatar into a circle, like how it's displayed.")
+    @app_commands.command(name="command_avatar", description="command_avatar")
+    @app_commands.describe(user="command_avatar_user", crop="command_avatar_crop")
+    @app_commands.rename(user="command_avatar_user", crop="command_avatar_crop")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def avatar(self, interaction: discord.Interaction, user: User, crop: bool = False):

@@ -3,7 +3,7 @@ from random import randint, randrange
 import requests
 
 try:
-    usernames = open("./data/usernames.txt")
+    usernames = open("./assets/usernames.txt")
 except FileNotFoundError:
     usernames = None
 

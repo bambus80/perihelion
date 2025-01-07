@@ -63,10 +63,10 @@ async def on_app_command_error(interaction: discord.Interaction, error: AppComma
         log.warning(f'Exception occured by user {interaction.user.name}', exc_info=error)
 
     if isinstance(error, CommandInvokeError):
-        await interaction.response.send_message(embed=error_template(f"### {type(error.original).__name__}\n\n{error.original}"), ephemeral=True)
+        await interaction.response.send_message(embed=error_template(interaction, f"### {type(error.original).__name__}\n\n{error.original}"), ephemeral=True)
         await bot.error_channel.send(f"## Exception occured in command/contextmenu {command.name if command else "non-command"} by user {interaction.user.name}\n\n ### {type(error.original).__name__}\n\n```{"".join(traceback.format_exception(error.original)).replace("\\n", "\n")}```") #pyright: ignore[reportCallIssue, reportOptionalMemberAccess, reportAttributeAccessIssue]
         return
-    await interaction.response.send_message(embed=error_template(f"### {type(error).__name__}\n\n{error.args[0]}"), ephemeral=True)
+    await interaction.response.send_message(embed=error_template(interaction, f"### {type(error).__name__}\n\n{error.args[0]}"), ephemeral=True)
     await bot.error_channel.send(f"## Exception occured in command/contextmenu {command.name if command else "non-command"} by user {interaction.user.name}\n\n ### {type(error).__name__}\n\n```{"".join(traceback.format_exception(error)).replace("\\n", "\n")}```") #pyright: ignore[reportCallIssue, reportOptionalMemberAccess, reportAttributeAccessIssue]
 
 

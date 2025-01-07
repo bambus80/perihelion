@@ -14,6 +14,8 @@ from utils.logging import log
 class WikiManagerCog(commands.Cog, name="wikimanager"):
     def __init__(self, client):
         self.client = client
+        self.translator: JSONTranslator = client.tree.translator
+
 
     class WikiPage:
         def __init__(self, title, content, is_locked=False):

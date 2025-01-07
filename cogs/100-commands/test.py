@@ -4,12 +4,16 @@ from discord.ext import commands
 from utils.logging import log
 from utils.embeds import *
 from typing import Optional
+from utils.translation import JSONTranslator
 from utils.userdata import get_data_manager
 from discord.app_commands import locale_str
 
 class TestingCog(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.translator: JSONTranslator = client.tree.translator
+
+    # This is left intentionally untranslated.
 
     @commands.Cog.listener()
     async def on_ready(self):

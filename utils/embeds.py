@@ -7,7 +7,7 @@ from typing import Optional
 
 
 
-def embed_template(title: str, description: Optional[str] = None, footer: Optional[str] = None):
+def embed_template(interaction: discord.Interaction, title: str, description: Optional[str] = None, footer: Optional[str] = None):
     """Creates an Embed with the default color with provided title and description."""
     _embed_template = discord.Embed(
         title=title,
@@ -21,12 +21,22 @@ def embed_template(title: str, description: Optional[str] = None, footer: Option
     return _embed_template.copy()
 
 
-def error_template(description: str) -> discord.Embed:
+def error_template(interaction: discord.Interaction, description: str) -> discord.Embed:
     """Creates an Embed with a red color and an "error!" title."""
     _error_template = discord.Embed(
-        title="Error!",
+        title=interaction.client.tree.translator.translate_from_interaction("generic_error", interaction),
         description=description,
         color=0xff0000,
+    )
+    _error_template.set_footer(text=EMBED["FOOTER"])
+    return _error_template.copy()
+
+
+def success_template(interaction: discord.Interaction, description: str) -> discord.Embed:
+    _error_template = discord.Embed(
+        title=interaction.client.tree.translator.translate_from_interaction("generic_success", interaction),
+        description=description,
+        color=EMBED["COLOR"],
     )
     _error_template.set_footer(text=EMBED["FOOTER"])
     return _error_template.copy()

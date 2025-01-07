@@ -5,6 +5,7 @@ from discord.ext import commands
 from utils.logging import log
 from utils.embeds import *
 from typing import Optional
+from utils.translation import JSONTranslator
 from utils.userdata import get_data_manager
 from discord.app_commands import locale_str
 
@@ -17,6 +18,8 @@ from io import BytesIO
 class DistanceCog(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.translator: JSONTranslator = client.tree.translator
+
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -52,7 +55,7 @@ class DistanceCog(commands.Cog):
         }
     }
 
-    @app_commands.command(name="distance", description="How far are you from the sun?")
+    @app_commands.command(name="command_distance", description="command_distance")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def distance(self, interaction: discord.Interaction):

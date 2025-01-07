@@ -5,6 +5,7 @@ from discord.ext import commands
 from utils.logging import log
 from utils.embeds import *
 from typing import Optional
+from utils.translation import JSONTranslator
 from utils.userdata import get_data_manager
 from discord.app_commands import locale_str
 
@@ -17,23 +18,25 @@ from io import BytesIO
 class ImageCog(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.translator: JSONTranslator = client.tree.translator
+
 
     @commands.Cog.listener()
     async def on_ready(self):
         log.info("Cog: image loaded")
-
-    @app_commands.command(name="caption", description="Add a caption above an image.")
-    @app_commands.describe(caption="The caption to add.", image="The image to add the caption to.", typ="The type of caption.")
+        
+    @app_commands.command(name="command_caption", description="command_caption")
+    @app_commands.describe(caption="command_caption_caption", image="command_caption_image", typ="command_caption_typ")
+    @app_commands.rename(caption="command_caption_caption", image="command_caption_image", typ="command_caption_typ")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    @app_commands.choices(typ = [app_commands.Choice(name="Default",value="default")])
-    @app_commands.rename(typ = "type")
+    @app_commands.choices(typ = [app_commands.Choice(name="command_caption_choice_default",value="default")])
     async def caption(self, interaction: discord.Interaction, caption: str, image: discord.Attachment, typ: app_commands.Choice[str] = "default"): #pyright: ignore[reportArgumentType] per this being expanded later
         if hasattr(image, "height"):
             img = await image.read()
             img = Image.open(BytesIO(img))
         else:
-            await interaction.response.send_message("This isn't an image!", ephemeral=True)
+            await interaction.response.send_message(self.translator.translate_from_interaction("caption_not_image", interaction), ephemeral=True)
             return
 
         w, h = img.size

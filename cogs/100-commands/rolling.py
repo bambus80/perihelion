@@ -4,6 +4,7 @@ from discord.ext import commands
 from utils.logging import log
 from utils.embeds import *
 from typing import Optional
+from utils.translation import JSONTranslator
 from utils.userdata import get_data_manager
 from discord.app_commands import locale_str
 
@@ -13,14 +14,17 @@ from utils.rolling.coloring import *
 class RollCog(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.translator: JSONTranslator = client.tree.translator
+
 
     # Use @command.Cog.listener() for an event-listener (on_message, on_ready, etc.)
     @commands.Cog.listener()
     async def on_ready(self):
         log.info("Cog: rolling loaded")
 
-    @app_commands.command(name="roll", description="Rolls some dice.")
-    @app_commands.describe(rolls="A list of rolls.")
+    @app_commands.command(name="command_roll", description="command_roll")
+    @app_commands.rename(rolls="command_roll_rolls")
+    @app_commands.describe(rolls="command_roll_rolls")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def roll(self, interaction: discord.Interaction, rolls: Optional[str]):
@@ -53,7 +57,7 @@ class RollCog(commands.Cog):
                 result_mins.append(result_min)
                 result_maxs.append(result_max)
             except RollException as exc:
-                await interaction.response.send_message(embed=error_template(exc.information))
+                await interaction.response.send_message(embed=error_template(interaction, exc.information))
                 return
 
         if settings["Global: Compact mode"]:
@@ -65,12 +69,12 @@ class RollCog(commands.Cog):
                         if len(message) > 2000:
                             raise RollException("Roll result too long.")
                 except RollException:
-                    embed = error_template(f"Your roll was too long.")
+                    embed = error_template(interaction, self.translator.translate_from_interaction("roll_result_too_long", interaction))
                     break
             await interaction.response.send_message(message)
             return
         else:
-            embed = embed_template(f"--- {' '.join(roll_expressions)} ---")
+            embed = embed_template(interaction, f"--- {' '.join(roll_expressions)} ---")
 
             normalized_results = [normalize(sum(mini.rolls), sum(maxi.rolls), sum(result.rolls)) for mini, maxi, result in
                                   zip(result_mins, result_maxs, results)]
@@ -85,7 +89,7 @@ class RollCog(commands.Cog):
                             raise RollException("Roll result too long.")
                         embed.add_field(name=f"{tup[0]}", value=tup[1], inline=False)
                 except RollException:
-                    embed = error_template(f"Your roll was too long.")
+                    embed = error_template(interaction, self.translator.translate_from_interaction("roll_result_too_long", interaction))
                     break
             await interaction.response.send_message(embed=embed)
 

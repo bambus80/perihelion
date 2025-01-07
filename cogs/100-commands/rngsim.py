@@ -4,6 +4,7 @@ from discord.ext import commands
 from utils.logging import log
 import random
 from math import floor
+from utils.translation import JSONTranslator
 from utils.userdata import get_data_manager
 
 from typing import Union, List, Optional
@@ -11,16 +12,17 @@ from typing import Union, List, Optional
 class RngSimCog(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.translator: JSONTranslator = client.tree.translator
+
 
     @commands.Cog.listener()
     async def on_ready(self):
         log.info("Cog: rngsim loaded")
 
-    @app_commands.command(name="rngsim")
+    @app_commands.command(name="command_rngsim", description="command_rngsim")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def rngsim(self, interaction: discord.Interaction):
-        """basically just gambling lol"""
         settings = get_data_manager("user", interaction.user.id)
         old_highscore = settings["RngSim: Highscore"]
         denom = floor(1/random.random())

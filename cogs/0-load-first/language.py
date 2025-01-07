@@ -6,10 +6,13 @@ import discord, requests
 from discord import app_commands
 from discord.ext import commands
 from utils.logging import log
+from utils.translation import JSONTranslator
 
 class LanguageSystemCog(commands.Cog, name="language"):
     def __init__(self, client):
         self.client = client
+        self.translator: JSONTranslator = client.tree.translator
+
 
     def list_format(self, input_list):
         """
