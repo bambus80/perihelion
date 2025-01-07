@@ -20,6 +20,7 @@ class RngSimCog(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def rngsim(self, interaction: discord.Interaction):
+        """basically just gambling lol"""
         settings = get_data_manager("user", interaction.user.id)
         old_highscore = settings["RngSim: Highscore"]
         denom = floor(1/random.random())

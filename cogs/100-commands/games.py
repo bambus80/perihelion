@@ -21,7 +21,7 @@ class GamesCog(commands.GroupCog, group_name="game"):
     @app_commands.command(name="tictactoe")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def tictactoe(self, interaction: discord.Interaction, size: Optional[app_commands.Range[int, 3, 5]], row: Optional[app_commands.Range[int, 3, 5]]):
+    async def tictactoe(self, interaction: discord.Interaction, size: Optional[app_commands.Range[int, 3, 5]], row: Optional[app_commands.Range[int, 3, 5]], misere: Optional[bool] = False):
         """
         Creates a game of tic-tac-toe.
 
@@ -31,6 +31,8 @@ class GamesCog(commands.GroupCog, group_name="game"):
             The size of the board. Ranges from 3 to 5.
         row: Optional[app_commands.Range[int, 3, 5]]
             The amount of letters in a row you need to win. Defaults to the board size, but can go down to 3.
+        misere: Optional[bool]
+            Inverts the winner and loser - if this is enabled, you want to **lose**!
         """
         if size is None:
             size = 3
@@ -39,7 +41,7 @@ class GamesCog(commands.GroupCog, group_name="game"):
         if row > size:
             await interaction.response.send_message(embed=error_template("Row length has to be less than or equal to the board size!"))
         else:
-            await interaction.response.send_message("Pick a place to start!", view=self.ttt.TicTacToe(size, row))
+            await interaction.response.send_message(f"Pick a place to start! {"Note that this game is in misere mode, so your goal is to lose!"}", view=self.ttt.TicTacToe(size, row, misere))
 
 async def setup(client):
     await client.add_cog(GamesCog(client))

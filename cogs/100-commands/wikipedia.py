@@ -43,7 +43,10 @@ class WikipediaCog(commands.Cog):
         url2 = f"https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=true&exlimit=1&titles={data['pages'][0]['key']}&explaintext=1&format=json&formatversion=2"
         response2 = requests.get(url2, headers=headers)
         data2 = response2.json()
-        await interaction.response.send_message(embed=embed_template(f"{data['pages'][0]['title']}", f"## [Link to page](https://en.wikipedia.org/wiki/{data['pages'][0]['key']})\n\n{data2["query"]["pages"][0]["extract"]}"))
+        string = data2["query"]["pages"][0]["extract"]
+        if len(string) > 200:
+            string = string[:200] + "..."
+        await interaction.response.send_message(embed=embed_template(f"{data['pages'][0]['title']}", f"## [Link to page](https://en.wikipedia.org/wiki/{data['pages'][0]['key']})\n\n{string}"))
 
 async def setup(client):
     await client.add_cog(WikipediaCog(client))

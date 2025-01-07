@@ -24,8 +24,16 @@ class InfoCog(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def info(self, interaction: discord.Interaction):
-        embed = embed_template(f"{BOT_NAME} version {VERSION} info")
+        embed = embed_template(f"{BOT_NAME} version {VERSION} info", """### Credits
+ = Contributors =
+- @whirlingstars - i made most of the bot
+- @diginist - made /username, /distance, and a few other Cool Things
+- @legitsi - made the original rolling system, and /rngsim
+
+ = Helpers =
+-# @scratchfakemon - helped w/ bugfixing""")
         embed.add_field(name="rollplayerlib version", value=metadata.version("rollplayerlib"))
+        embed.add_field(name="peridata version", value=metadata.version("peridata"))
         embed.add_field(name="python version", value=sys.version)
         embed.add_field(name="discord.py version", value=discord.__version__)
         await interaction.response.send_message(embed=embed, ephemeral=True)

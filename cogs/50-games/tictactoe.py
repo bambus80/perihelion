@@ -10,7 +10,7 @@ class TicTacToeCog(commands.Cog, name="games/tictactoe"):
         self.client = client
 
     class TicTacToeButton(discord.ui.Button['TicTacToe']):
-        def __init__(self, x: int, y: int):
+        def __init__(self, x: int, y: int, misere: bool):
             # A label is required, but we don't need one so a zero-width space is used
             # The row parameter tells the View which row to place the button under.
             # A View can only contain up to 5 rows -- each row can only have 5 buttons.
@@ -18,7 +18,8 @@ class TicTacToeCog(commands.Cog, name="games/tictactoe"):
             super().__init__(style=discord.ButtonStyle.secondary, label='\u200b', row=y)
             self.x = x
             self.y = y
-
+            self.misere = misere
+            
         # This function is called whenever this particular button is pressed
         # This is part of the "meat" of the game logic
         async def callback(self, interaction: discord.Interaction):
@@ -67,9 +68,15 @@ class TicTacToeCog(commands.Cog, name="games/tictactoe"):
             if winner is not None:
                 assert view.players[0] is not None and view.players[1] is not None
                 if winner == view.X:
-                    content = f'X ({view.players[0].global_name}) won!'
+                    if self.misere: # we can just inverse the winner
+                        content = f'O ({view.players[1].global_name}) won!'
+                    else:
+                        content = f'X ({view.players[0].global_name}) won!'
                 elif winner == view.O:
-                    content = f'O ({view.players[1].global_name}) won!'
+                    if self.misere: # we can just inverse the winner
+                        content = f'X ({view.players[0].global_name}) won!'
+                    else:
+                        content = f'O ({view.players[1].global_name}) won!'
                 else:
                     content = "It's a tie!"
 
@@ -86,10 +93,11 @@ class TicTacToeCog(commands.Cog, name="games/tictactoe"):
         O = 1
         Tie = 2
 
-        def __init__(self, size, row):
+        def __init__(self, size, row, misere):
             super().__init__()
             self.size = size
             self.current_player = self.X
+            self.misere = misere
             self.board = [x[:] for x in [[0] * size] * size]
             self.row = row
             self.players: List[Union[User, Member, None]] = [None, None]
@@ -99,7 +107,7 @@ class TicTacToeCog(commands.Cog, name="games/tictactoe"):
             # the actual game.
             for x in range(size):
                 for y in range(size):
-                    self.add_item(TicTacToeCog.TicTacToeButton(x, y))
+                    self.add_item(TicTacToeCog.TicTacToeButton(x, y, misere))
 
         # This method checks for the board winner -- it is used by the TicTacToeButton
         def check_board_winner(self):
