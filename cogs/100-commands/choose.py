@@ -40,22 +40,22 @@ class ChooseCog(commands.Cog):
             if unique:
                 if len(option_list) >= count:
                     if settings["Global: Compact mode"]:
-                        await interaction.response.send_message(f"{self.language.list_format(random.sample(option_list, k=count))}")
+                        await interaction.response.send_message(f"{self.language.list_format(interaction, random.sample(option_list, k=count))}")
                     else:
                         await interaction.response.send_message(
                             embed=embed_template(interaction, 
                                                  self.translator.translate_from_interaction("choose_lets_pick", interaction,
-                                                                                            [self.language.list_format(random.sample(option_list, k=count))])))
+                                                                                            [self.language.list_format(interaction, random.sample(option_list, k=count))])))
                 else:
                     await interaction.response.send_message(embed=error_template(interaction, self.translator.translate_from_interaction("choose_too_many_choices", interaction)))
             else:
                 if settings["Global: Compact mode"]:
-                    await interaction.response.send_message(f"{self.language.list_format(random.choices(option_list, k=count))}")
+                    await interaction.response.send_message(f"{self.language.list_format(interaction, random.choices(option_list, k=count))}")
                 else:
                     await interaction.response.send_message(
                         embed=embed_template(interaction,
                                                  self.translator.translate_from_interaction("choose_lets_pick", interaction,
-                                                                                            [self.language.list_format(self.language.list_format(random.choices(option_list,k=count)))])))
+                                                                                            [self.language.list_format(interaction, random.choices(option_list,k=count))])))
         else:
             await interaction.response.send_message(embed=error_template(interaction,  self.translator.translate_from_interaction("choose_zero_choices", interaction)))
 

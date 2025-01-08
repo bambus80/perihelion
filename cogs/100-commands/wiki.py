@@ -138,7 +138,7 @@ class WikiCog(commands.GroupCog, group_name="command_wiki"):
         await interaction.response.send_message(embed=success_template(interaction, f"{page} wiped"))
 
 
-    @app_commands.command(name="command_wiki_unlock", description="command_unlock_delete")
+    @app_commands.command(name="command_wiki_unlock", description="command_wiki_unlock")
     @app_commands.rename(page="command_wiki_unlock_page")
     @app_commands.describe(page="command_wiki_unlock_page")
     @app_commands.allowed_installs(guilds=True, users=True)

@@ -136,7 +136,7 @@ class NoteCog(commands.GroupCog, group_name="command_note"):
             await interaction.response.send_message(embed=error_template(interaction, self.translator.translate_from_interaction("wiki_note_not_found", interaction)), ephemeral=True)
         await interaction.response.send_message(embed=success_template(interaction, f"{page} wiped"))
 
-    @app_commands.command(name="command_note_unlock", description="command_unlock_delete")
+    @app_commands.command(name="command_note_unlock", description="command_note_unlock")
     @app_commands.rename(page="command_note_unlock_page")
     @app_commands.describe(page="command_note_unlock_page")
     @app_commands.allowed_installs(guilds=True, users=True)

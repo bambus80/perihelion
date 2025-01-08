@@ -14,7 +14,15 @@ class LanguageSystemCog(commands.Cog, name="language"):
         self.translator: JSONTranslator = client.tree.translator
 
 
-    def list_format(self, input_list):
+    def list_format(self, interaction: discord.Interaction, input_list):
+        if interaction.locale == discord.Locale.russian:
+            return self.list_format_ru(input_list)
+        if interaction.locale == discord.Locale.polish:
+            return self.list_format_pl(input_list)
+        return  self.list_format_en(input_list)
+
+        
+    def list_format_en(self, input_list):
         """
         Formats a list for English.
         """
@@ -26,6 +34,32 @@ class LanguageSystemCog(commands.Cog, name="language"):
             return f"{input_list[0]} and {input_list[1]}"
         else:
             return ", ".join(input_list[:-1])+f", and {input_list[-1]}"
+
+    def list_format_ru(self, input_list):
+        """
+        Formats a list for Russian.
+        """
+        if len(input_list) == 0:
+            return "ничего"
+        if len(input_list) == 1:
+            return str(input_list[0])
+        if len(input_list) == 2:
+            return f"{input_list[0]} и {input_list[1]}"
+        else:
+            return ", ".join(input_list[:-1])+f", и {input_list[-1]}"
+        
+    def list_format_pl(self, input_list):
+        """
+        Formats a list for Polish.
+        """
+        if len(input_list) == 0:
+            return "brak"
+        if len(input_list) == 1:
+            return str(input_list[0])
+        if len(input_list) == 2:
+            return f"{input_list[0]} i {input_list[1]}"
+        else:
+            return ", ".join(input_list[:-1])+f" i {input_list[-1]}"
 
     def s(self, number):
         """

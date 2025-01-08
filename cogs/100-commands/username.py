@@ -39,7 +39,7 @@ class UsernameCog(commands.Cog):
         for i in range(count):
             usernames.append(get_random_username())
         if settings["Global: Compact mode"]:
-            await interaction.followup.send(f"{title} | {self.language.list_format(usernames)}")
+            await interaction.followup.send(f"{title} | {self.language.list_format(interaction, usernames)}")
         else:
             await interaction.followup.send(embeds=[embed_template(interaction, title,
                                                                 "\n".join(usernames))])
